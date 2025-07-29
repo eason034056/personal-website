@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import '../styles/globals.css'
 
@@ -11,7 +11,12 @@ export const metadata: Metadata = {
   description: '以可愛 3D 角色導覽的個人作品網站 - Play & Build with Me!',
   keywords: ['portfolio', '3D', 'web development', 'interactive'],
   authors: [{ name: 'Eason Wu' }],
-  viewport: 'width=device-width, initial-scale=1',
+}
+
+// Viewport 設定
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 // 根布局組件 - 所有頁面都會使用這個布局
@@ -24,12 +29,12 @@ export default function RootLayout({
     <html lang="zh-TW">
       <body className={inter.className}>
         {/* 導航列 */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-md border-b border-transparent">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               {/* Logo */}
               <div className="flex-shrink-0">
-                <h1 className="text-xl font-bold text-primary-600">
+                <h1 className="text-xl font-bold text-black">
                   Eason Wu
                 </h1>
               </div>
