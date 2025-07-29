@@ -17,6 +17,14 @@ export default function Character({ position, animation, onClick }: CharacterPro
   const groupRef = useRef<THREE.Group>(null)
   const [isHovered, setIsHovered] = useState(false)
   
+  // 控制游標樣式
+  useEffect(() => {
+    document.body.style.cursor = isHovered ? 'pointer' : 'auto'
+    return () => {
+      document.body.style.cursor = 'auto'
+    }
+  }, [isHovered])
+
   // TODO: 載入真實的 3D 角色模型
   // const { scene, animations } = useGLTF('/models/character.glb')
   
@@ -61,7 +69,6 @@ export default function Character({ position, animation, onClick }: CharacterPro
       onClick={onClick}
       onPointerEnter={() => setIsHovered(true)}
       onPointerLeave={() => setIsHovered(false)}
-      style={{ cursor: 'pointer' }}
     >
       {/* 角色身體 - 暫時用簡單的膠囊形狀 */}
       <mesh position={[0, 1, 0]}>

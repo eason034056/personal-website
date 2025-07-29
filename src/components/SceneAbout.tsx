@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Environment, Html } from '@react-three/drei'
 import * as THREE from 'three'
@@ -40,6 +40,14 @@ interface DeskItemProps {
 function DeskItem({ position, geometry, color, onClick, isHovered, onHover }: DeskItemProps) {
   const meshRef = useRef<THREE.Mesh>(null)
 
+  // 控制游標樣式
+  useEffect(() => {
+    document.body.style.cursor = isHovered ? 'pointer' : 'auto'
+    return () => {
+      document.body.style.cursor = 'auto'
+    }
+  }, [isHovered])
+
   useFrame((state) => {
     if (meshRef.current && isHovered) {
       // Hover 時輕微浮動
@@ -56,7 +64,6 @@ function DeskItem({ position, geometry, color, onClick, isHovered, onHover }: De
       onClick={onClick}
       onPointerEnter={() => onHover(true)}
       onPointerLeave={() => onHover(false)}
-      style={{ cursor: 'pointer' }}
     >
       {geometry}
       <meshStandardMaterial 
