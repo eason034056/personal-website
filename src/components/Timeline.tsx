@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 
-// 時間軸項目介面
+// Timeline item interface
 interface TimelineItem {
   id: string
   year: string
@@ -14,64 +14,64 @@ interface TimelineItem {
   type: 'work' | 'education' | 'project'
 }
 
-// 時間軸資料
+// Timeline data
 const timelineData: TimelineItem[] = [
   {
     id: '1',
     year: '2024',
-    title: '全端工程師',
-    company: '科技新創公司',
-    description: '負責開發創新的 3D 網頁應用，結合 React Three Fiber 打造沉浸式用戶體驗。參與產品規劃和架構設計。',
+    title: 'Full Stack Developer',
+    company: 'Tech Startup',
+    description: 'Developed innovative 3D web applications using React Three Fiber to create immersive user experiences. Participated in product planning and architecture design.',
     skills: ['React', 'Next.js', 'Three.js', 'TypeScript', 'Node.js'],
     type: 'work'
   },
   {
     id: '2',
     year: '2023',
-    title: '前端工程師',
-    company: '數位行銷公司',
-    description: '開發響應式網站和互動式行銷頁面，優化使用者體驗和轉換率。協助團隊導入現代化開發流程。',
+    title: 'Frontend Developer',
+    company: 'Digital Marketing Agency',
+    description: 'Developed responsive websites and interactive marketing pages, optimizing user experience and conversion rates. Helped the team adopt modern development processes.',
     skills: ['React', 'Vue.js', 'GSAP', 'Tailwind CSS'],
     type: 'work'
   },
   {
     id: '3',
     year: '2022',
-    title: '個人專案開發',
-    company: '自由工作',
-    description: '開始接觸 3D 網頁技術，完成多個實驗性專案。學習 Three.js 和 React Three Fiber，建立技術基礎。',
+    title: 'Personal Projects',
+    company: 'Freelance',
+    description: 'Started exploring 3D web technologies and completed multiple experimental projects. Learned Three.js and React Three Fiber, building technical foundations.',
     skills: ['Three.js', 'WebGL', 'React', 'JavaScript'],
     type: 'project'
   },
   {
     id: '4',
     year: '2021',
-    title: '資訊工程學士',
-    company: '國立科技大學',
-    description: '主修軟體工程，專精於網頁開發和資料結構。參與多項程式競賽，獲得優異成績。',
+    title: 'Bachelor of Computer Science',
+    company: 'National University of Technology',
+    description: 'Majored in Software Engineering, specializing in web development and data structures. Participated in programming competitions with excellent results.',
     skills: ['C++', 'Java', 'Python', 'Database', 'Algorithm'],
     type: 'education'
   }
 ]
 
-// 時間軸項目組件
+// Timeline item component props
 interface TimelineItemProps {
   item: TimelineItem
   index: number
-  isLeft: boolean
+  isTop?: boolean
 }
 
-function TimelineItemComponent({ item, index, isLeft }: TimelineItemProps) {
+function TimelineItemComponent({ item, index, isTop = false }: TimelineItemProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
-  // 根據類型決定顏色
+  // Get type-based gradient colors
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'work': return 'bg-primary-500'
-      case 'education': return 'bg-green-500'
-      case 'project': return 'bg-orange-500'
-      default: return 'bg-gray-500'
+      case 'work': return 'bg-gradient-to-r from-gray-700 to-gray-800'
+      case 'education': return 'bg-gradient-to-r from-gray-600 to-gray-700'
+      case 'project': return 'bg-gradient-to-r from-gray-500 to-gray-600'
+      default: return 'bg-gradient-to-r from-gray-400 to-gray-500'
     }
   }
 
@@ -87,91 +87,90 @@ function TimelineItemComponent({ item, index, isLeft }: TimelineItemProps) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
-      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: isLeft ? -50 : 50 }}
+      initial={{ opacity: 0, y: isTop ? -50 : 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: isTop ? -50 : 50 }}
       transition={{ duration: 0.6, delay: index * 0.2 }}
-      className={`flex items-center mb-12 ${isLeft ? 'flex-row-reverse' : 'flex-row'}`}
+      className={`
+        relative flex items-center justify-center
+        w-full md:w-1/4 min-w-[280px]
+        mb-12 md:mb-0
+        ${isTop ? 'md:flex-col' : 'md:flex-col-reverse'}
+      `}
     >
-      {/* 時間軸卡片 */}
-      <div className={`timeline-card w-96 ${isLeft ? 'mr-8' : 'ml-8'}`}>
-        {/* 年份標籤 */}
+      {/* Timeline card */}
+      <div className={`
+        timeline-card flex-1
+        bg-white rounded-lg shadow-lg p-6
+        w-[90%] md:w-full max-w-[400px]
+        relative
+        hover:shadow-xl transition-shadow duration-300
+        border border-gray-100
+        ${isTop ? 'md:mb-8' : 'md:mt-8'}
+      `}>
+        {/* Year tag */}
         <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold mb-3 ${getTypeColor(item.type)} text-white`}>
           <span className="mr-1">{getTypeIcon(item.type)}</span>
           {item.year}
         </div>
 
-        {/* 標題和公司 */}
+        {/* Title and company */}
         <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
-        <h4 className="text-lg text-primary-600 font-semibold mb-3">{item.company}</h4>
+        <h4 className="text-lg text-gray-600 font-semibold mb-3">{item.company}</h4>
 
-        {/* 描述 */}
+        {/* Description */}
         <p className="text-gray-600 mb-4 leading-relaxed">{item.description}</p>
 
-        {/* 技能標籤 */}
+        {/* Skill tags */}
         <div className="flex flex-wrap gap-2">
           {item.skills.map((skill) => (
             <span
               key={skill}
-              className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-sm"
+              className="px-2 py-1 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-md text-sm hover:from-gray-200 hover:to-gray-300 transition-colors duration-300"
             >
               {skill}
             </span>
           ))}
         </div>
-
-        {/* 箭頭指向時間軸 */}
-        <div className={`absolute top-8 ${isLeft ? 'left-full' : 'right-full'} w-0 h-0 
-                        ${isLeft ? 'border-l-8 border-l-white' : 'border-r-8 border-r-white'}
-                        border-t-8 border-b-8 border-t-transparent border-b-transparent`}></div>
-      </div>
-
-      {/* 時間軸節點 */}
-      <div className={`relative ${getTypeColor(item.type)} w-4 h-4 rounded-full z-10 flex items-center justify-center`}>
-        <div className="w-2 h-2 bg-white rounded-full"></div>
-        
-        {/* 節點光暈效果 */}
-        <motion.div
-          animate={{ scale: [1, 1.5, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className={`absolute inset-0 ${getTypeColor(item.type)} rounded-full opacity-30`}
-        ></motion.div>
       </div>
     </motion.div>
   )
 }
 
-// 主時間軸組件
+// Main Timeline component
 export default function Timeline() {
-  return (
-    <div className="max-w-4xl mx-auto px-4 relative">
-      {/* 垂直時間軸線 */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gray-300 h-full"></div>
+  const sortedTimelineData = [...timelineData].sort((a, b) => parseInt(b.year) - parseInt(a.year))
 
-      {/* 時間軸項目 */}
-      <div className="relative">
-        {timelineData.map((item, index) => (
+  return (
+    <div className="max-w-[1400px] mx-auto px-4 relative py-20">
+      {/* Timeline line - Mobile vertical */}
+      <div className="md:hidden absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-gray-200 to-gray-300 h-full"></div>
+
+      {/* Timeline line - Desktop horizontal */}
+      <div className="hidden md:block absolute top-1/2 transform -translate-y-1/2 w-full h-0.5 bg-gradient-to-r from-gray-200 to-gray-300"></div>
+
+      {/* Timeline items container */}
+      <div className="relative flex flex-col md:flex-row md:justify-between md:items-center md:flex-nowrap gap-4">
+        {sortedTimelineData.map((item, index) => (
           <TimelineItemComponent
             key={item.id}
             item={item}
             index={index}
-            isLeft={index % 2 === 0}
+            isTop={index % 2 === 0}
           />
         ))}
       </div>
 
-      {/* 結尾點 */}
+      {/* End point - Mobile only */}
       <motion.div
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: timelineData.length * 0.2 + 0.5 }}
-        className="flex justify-center"
+        transition={{ delay: sortedTimelineData.length * 0.2 + 0.5 }}
+        className="flex justify-center md:hidden"
       >
-        <div className="bg-primary-500 w-6 h-6 rounded-full flex items-center justify-center">
+        <div className="bg-gradient-to-r from-gray-600 to-gray-700 w-6 h-6 rounded-full flex items-center justify-center">
           <span className="text-white text-xs">✨</span>
         </div>
       </motion.div>
-
-      {/* TODO-LLM:Timeline:Add character walking animation along timeline */}
     </div>
   )
 } 

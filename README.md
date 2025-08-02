@@ -89,16 +89,11 @@ pnpm dev
 - CTA 按鈕導向 About 頁面
 
 ### 👨‍💻 About Page (`/about`)
-- 3D 書桌場景
-- 可點擊的桌面物件
-- 個人資訊卡片
-- Hover 效果展示詳細資訊
-
-### 📈 Experience Page (`/experience`)
 - 互動式時間軸
 - 工作和學習經歷
 - 動畫進場效果
 - 技能標籤展示
+- 個人成長歷程
 
 ### 🎨 Projects Page (`/projects`)
 - 專案網格展示

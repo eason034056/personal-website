@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
-// 表單資料介面
+// Form data interface
 interface ContactFormData {
   name: string
   email: string
@@ -13,21 +13,19 @@ interface ContactFormData {
   message: string
 }
 
-// 表單驗證規則
+// Form validation schema
 const schema = yup.object({
-  name: yup.string().required('請輸入您的姓名').min(2, '姓名至少需要 2 個字元'),
-  email: yup.string().required('請輸入電子信箱').email('請輸入有效的電子信箱'),
-  subject: yup.string().required('請輸入主旨').min(5, '主旨至少需要 5 個字元'),
-  message: yup.string().required('請輸入訊息內容').min(10, '訊息至少需要 10 個字元')
+  name: yup.string().required('Please enter your name').min(2, 'Name must be at least 2 characters'),
+  email: yup.string().required('Please enter your email').email('Please enter a valid email'),
+  subject: yup.string().required('Please enter a subject').min(5, 'Subject must be at least 5 characters'),
+  message: yup.string().required('Please enter your message').min(10, 'Message must be at least 10 characters')
 })
 
-// 聯絡表單組件
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [characterAnimation, setCharacterAnimation] = useState<'idle' | 'typing' | 'wave'>('idle')
 
-  // 使用 react-hook-form 處理表單
   const {
     register,
     handleSubmit,
@@ -37,23 +35,18 @@ export default function ContactForm() {
     resolver: yupResolver(schema)
   })
 
-  // 表單提交處理
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true)
     setCharacterAnimation('typing')
     
     try {
-      // 模擬 API 呼叫 - 實際專案中會使用 EmailJS 或後端 API
+      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // TODO: 實際發送郵件
-      // await emailjs.send('service_id', 'template_id', data, 'public_key')
       
       setSubmitStatus('success')
       setCharacterAnimation('wave')
       reset()
       
-      // 3 秒後重置狀態
       setTimeout(() => {
         setSubmitStatus('idle')
         setCharacterAnimation('idle')
@@ -63,7 +56,6 @@ export default function ContactForm() {
       setSubmitStatus('error')
       setCharacterAnimation('idle')
       
-      // 3 秒後重置錯誤狀態
       setTimeout(() => {
         setSubmitStatus('idle')
       }, 3000)
@@ -72,7 +64,6 @@ export default function ContactForm() {
     }
   }
 
-  // 處理輸入時的角色動畫
   const handleInputFocus = () => {
     if (!isSubmitting) {
       setCharacterAnimation('typing')
@@ -86,18 +77,18 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="bg-white rounded-xl p-8 shadow-lg">
-      {/* 表單標題 */}
+    <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 w-full max-w-4xl mx-auto">
+      {/* Form Title */}
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">發送訊息</h2>
-        <p className="text-gray-600">我很期待聽到您的想法！</p>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">Send Message</h2>
+        <p className="text-gray-600">I'm excited to hear your thoughts!</p>
         
-        {/* 角色狀態指示器 */}
+        {/* Character Status Indicator */}
         <div className="mt-4 flex justify-center">
-          <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors duration-300 ${
-            characterAnimation === 'idle' ? 'bg-gray-200' :
-            characterAnimation === 'typing' ? 'bg-yellow-200' :
-            'bg-green-200'
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 ${
+            characterAnimation === 'idle' ? 'bg-gradient-to-br from-gray-100 to-gray-200' :
+            characterAnimation === 'typing' ? 'bg-gradient-to-br from-gray-200 to-gray-300' :
+            'bg-gradient-to-br from-gray-300 to-gray-400'
           }`}>
             <span className="text-2xl">
               {characterAnimation === 'idle' ? '😊' :
@@ -107,78 +98,80 @@ export default function ContactForm() {
           </div>
         </div>
         <p className="text-sm text-gray-500 mt-2">
-          {characterAnimation === 'idle' ? '我在等待您的訊息' :
-           characterAnimation === 'typing' ? '我在認真聽您說話' :
-           '謝謝您的訊息！'}
+          {characterAnimation === 'idle' ? 'Waiting for your message' :
+           characterAnimation === 'typing' ? 'Listening carefully...' :
+           'Thank you for your message!'}
         </p>
       </div>
 
-      {/* 成功/錯誤訊息 */}
+      {/* Success/Error Messages */}
       {submitStatus === 'success' && (
-        <div className="success-message mb-6">
-          <p className="font-semibold">訊息發送成功！</p>
-          <p className="text-sm mt-1">我會盡快回覆您的訊息。</p>
+        <div className="mb-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border border-gray-200">
+          <p className="font-semibold text-gray-800">Message sent successfully!</p>
+          <p className="text-sm mt-1 text-gray-600">I'll get back to you soon.</p>
         </div>
       )}
 
       {submitStatus === 'error' && (
-        <div className="error-message mb-6">
-          <p className="font-semibold">發送失敗</p>
-          <p className="text-sm mt-1">請稍後再試，或直接發送郵件給我。</p>
+        <div className="mb-6 p-4 bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg border border-gray-300">
+          <p className="font-semibold text-gray-800">Failed to send</p>
+          <p className="text-sm mt-1 text-gray-600">Please try again or email me directly.</p>
         </div>
       )}
 
-      {/* 聯絡表單 */}
+      {/* Contact Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* 姓名欄位 */}
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-            姓名 *
-          </label>
-          <input
-            {...register('name')}
-            id="name"
-            type="text"
-            className={`form-input ${errors.name ? 'border-red-500' : ''}`}
-            placeholder="請輸入您的姓名"
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-          )}
+        {/* Name and Email Fields Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Name Field */}
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+              Name *
+            </label>
+            <input
+              {...register('name')}
+              id="name"
+              type="text"
+              className={`form-input w-full rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-gray-400 focus:border-transparent`}
+              placeholder="Enter your name"
+              onFocus={handleInputFocus}
+              onBlur={handleInputBlur}
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            )}
+          </div>
+
+          {/* Email Field */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              Email *
+            </label>
+            <input
+              {...register('email')}
+              id="email"
+              type="email"
+              className={`form-input w-full rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-gray-400 focus:border-transparent`}
+              placeholder="your.email@example.com"
+              onFocus={handleInputFocus}
+              onBlur={handleInputBlur}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            )}
+          </div>
         </div>
 
-        {/* 電子信箱欄位 */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-            電子信箱 *
-          </label>
-          <input
-            {...register('email')}
-            id="email"
-            type="email"
-            className={`form-input ${errors.email ? 'border-red-500' : ''}`}
-            placeholder="your.email@example.com"
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
-        </div>
-
-        {/* 主旨欄位 */}
+        {/* Subject Field */}
         <div>
           <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-            主旨 *
+            Subject *
           </label>
           <input
             {...register('subject')}
             id="subject"
             type="text"
-            className={`form-input ${errors.subject ? 'border-red-500' : ''}`}
-            placeholder="想要討論的主題"
+            className={`form-input w-full rounded-lg border ${errors.subject ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-gray-400 focus:border-transparent`}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
           />
@@ -187,17 +180,16 @@ export default function ContactForm() {
           )}
         </div>
 
-        {/* 訊息內容欄位 */}
+        {/* Message Field */}
         <div>
           <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-            訊息內容 *
+            Message *
           </label>
           <textarea
             {...register('message')}
             id="message"
             rows={6}
-            className={`form-input resize-none ${errors.message ? 'border-red-500' : ''}`}
-            placeholder="請詳細描述您想要討論的內容..."
+            className={`form-input w-full rounded-lg border ${errors.message ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-gray-400 focus:border-transparent resize-none`}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
           />
@@ -206,33 +198,31 @@ export default function ContactForm() {
           )}
         </div>
 
-        {/* 提交按鈕 */}
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-300 transform ${
+          className={`w-full md:min-w-[200px] md:ml-auto py-3 px-6 rounded-lg font-semibold text-white transition-all duration-300 transform ${
             isSubmitting
               ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-primary-500 hover:bg-primary-600 hover:scale-105 shadow-lg hover:shadow-xl'
+              : 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 hover:scale-105 shadow-lg hover:shadow-xl'
           }`}
         >
           {isSubmitting ? (
             <span className="flex items-center justify-center">
-              <div className="loading-spinner w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-              發送中...
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
+              Sending...
             </span>
           ) : (
-            '🚀 發送訊息'
+            '🚀 Send Message'
           )}
         </button>
       </form>
 
-      {/* 表單說明 */}
+      {/* Form Note */}
       <div className="mt-6 text-center text-sm text-gray-500">
-        <p>您的個人資料僅用於回覆您的訊息，不會用於其他用途。</p>
+        <p>Your personal information will only be used to respond to your message.</p>
       </div>
-
-      {/* TODO-LLM:ContactForm:Add character animation based on form interaction */}
     </div>
   )
 } 

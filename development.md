@@ -1,8 +1,8 @@
-# 3D Portfolio Website — Developer Specification
+# 3D Portfolio Website — Developer Specification
 
-> **Codename:** *Play & Build with Me!*
+> **Codename:** *Play & Build with Me!*
 >
-> **Goal:** 以可愛 3D 角色作為導覽人，打造一個兼具互動感與資訊完整度的個人作品網站，展現 Landing Page、About、Experience、Side Projects、Contact Me 五大分頁。
+> **Goal:** 以可愛 3D 角色作為導覽人，打造一個兼具互動感與資訊完整度的個人作品網站，展現 Landing Page、About (含經歷)、Side Projects、Contact Me 四大分頁。
 
 ---
 
@@ -17,10 +17,9 @@
 | # | User Story                         | 互動重點                 | 完成判定                       |
 | - | ---------------------------------- | -------------------- | -------------------------- |
 | 1 | 作為訪客，我想在 Landing Page 與角色互動，快速進入網站 | 角色 hover 動作／CTA 滑入動畫 | 角色動畫執行 & CTA 觸發 About Page |
-| 2 | 作為訪客，我想在 About Page 了解站主背景         | 書桌物件 hover reveal    | 資訊氣泡完整顯示                   |
-| 3 | 作為訪客，我想看到站主經歷時間軸                   | 角色沿時間軸行走             | 卡片彈出並顯示細節                  |
-| 4 | 作為訪客，我想瀏覽 Side Projects 並點擊詳情      | 實驗室場景／角色小劇場          | 專案卡片顯示 + 圖片/影片載入           |
-| 5 | 作為訪客，我要能輕鬆聯絡站主                     | 表單輸入時角色視覺回饋          | 成功送出後訊息提醒                  |
+| 2 | 作為訪客，我想在 About Page 了解站主背景和經歷     | 時間軸動畫與互動            | 時間軸完整顯示並可互動              |
+| 3 | 作為訪客，我想瀏覽 Side Projects 並點擊詳情      | 實驗室場景／角色小劇場          | 專案卡片顯示 + 圖片/影片載入           |
+| 4 | 作為訪客，我要能輕鬆聯絡站主                     | 表單輸入時角色視覺回饋          | 成功送出後訊息提醒                  |
 
 ---
 
@@ -89,7 +88,7 @@
 
 ---
 
-## 6. Page Specs & 互動腳本
+## 6. Page Specs & 互動腳本
 
 ### 6.1 Landing (`/`)
 
@@ -99,9 +98,10 @@
 
 ### 6.2 About (`/about`)
 
-* 3D 場景：`scene_desk`；桌面物件採 `Raycaster` 點擊
-* Hover/Click 時以 *Html* overlay 顯示介紹文字
-* TODO: 實作 `useHoverInfo()` hook
+* 主要組件：`<Timeline>`
+* 使用 Framer Motion `whileInView` 實現時間軸動畫
+* 卡片點擊展開詳細資訊
+* TODO: 實作 `useTimelineAnimation()` hook
 
 ### 6.3 Experience (`/experience`)
 

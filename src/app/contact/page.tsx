@@ -2,80 +2,96 @@
 
 import { Suspense } from 'react'
 import ContactForm from '@/components/ContactForm'
+import { FaLinkedinIn, FaGithub, FaEnvelope } from 'react-icons/fa'
 
-// 聯絡頁面
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-20">
-      {/* 頁面標題 */}
+    <div
+      className="min-h-screen py-20"
+      style={{
+        background: 'linear-gradient(135deg, #f3f4f6 0%, #ffffff 100%)'
+      }}
+    >
+      {/* Page Title */}
       <div className="text-center mb-16">
-        <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-4">
-          聯絡我
-        </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          有任何問題或合作機會嗎？我很樂意與你交流！
-        </p>
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          Contact Me
+        </h2>
+        <div className="w-24 h-1 bg-gradient-to-r from-gray-400 to-gray-600 mx-auto"></div>
       </div>
 
-      {/* 聯絡表單 */}
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* 左側：聯絡資訊 */}
-          <div className="space-y-8">
-            <div className="bg-white rounded-xl p-8 shadow-lg">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">聯絡方式</h2>
+      {/* Contact Form Section */}
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+          {/* Left Side: Contact Information */}
+          <div className="w-full">
+            <div className="w-full bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Contact Details</h2>
               
-              <div className="space-y-4">
+              <div className="space-y-6">
+                {/* Email 區塊 */}
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center mr-4">
-                    <span className="text-white text-xl">📧</span>
+                  <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-gray-700 to-gray-800 rounded-full flex items-center justify-center mr-4">
+                    <div className="w-6 h-6 flex items-center justify-center">
+                      <FaEnvelope className="w-full h-full text-white" />
+                    </div>
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <h3 className="font-semibold text-gray-800">Email</h3>
-                    <p className="text-gray-600">eason.wu@example.com</p>
+                    <p className="text-gray-600 truncate">yu-senwu2026@u.northwestern.edu</p>
                   </div>
                 </div>
 
+                {/* LinkedIn 區塊 */}
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
-                    <span className="text-white text-xl">💼</span>
+                  <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-gray-600 to-gray-700 rounded-full flex items-center justify-center mr-4">
+                    <div className="w-6 h-6 flex items-center justify-center">
+                      <FaLinkedinIn className="w-full h-full text-white" />
+                    </div>
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <h3 className="font-semibold text-gray-800">LinkedIn</h3>
-                    <p className="text-gray-600">linkedin.com/in/eason-wu</p>
+                    <a 
+                      href="https://www.linkedin.com/in/yu-sen-wu-aa0961277/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 hover:text-gray-900 transition-colors block truncate"
+                    >
+                      https://www.linkedin.com/in/yu-sen-wu-aa0961277/
+                    </a>
                   </div>
                 </div>
 
+                {/* GitHub 區塊 */}
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mr-4">
-                    <span className="text-white text-xl">🐙</span>
+                  <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 rounded-full flex items-center justify-center mr-4">
+                    <div className="w-6 h-6 flex items-center justify-center">
+                      <FaGithub className="w-full h-full text-white" />
+                    </div>
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <h3 className="font-semibold text-gray-800">GitHub</h3>
-                    <p className="text-gray-600">github.com/eason-wu</p>
+                    <a 
+                      href="https://github.com/eason034056"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 hover:text-gray-900 transition-colors block truncate"
+                    >
+                      https://github.com/eason034056
+                    </a>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* 可用時間 */}
-            <div className="bg-white rounded-xl p-8 shadow-lg">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">回覆時間</h2>
-              <p className="text-gray-600 leading-relaxed">
-                我通常會在 24-48 小時內回覆訊息。如果是緊急事項，
-                請在訊息中註明，我會盡快回覆。
-              </p>
-              <div className="mt-4 p-4 bg-green-50 rounded-lg">
-                <p className="text-green-700 font-medium">
-                  ✅ 目前可以接受新的專案合作
-                </p>
               </div>
             </div>
           </div>
 
-          {/* 右側：聯絡表單 */}
-          <div>
-            <Suspense fallback={<div>載入表單中...</div>}>
+          {/* Right Side: Contact Form */}
+          <div className="lg:max-w-2xl">
+            <Suspense fallback={
+              <div className="flex items-center justify-center h-32">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-500 border-t-gray-800"></div>
+              </div>
+            }>
               <ContactForm />
             </Suspense>
           </div>
