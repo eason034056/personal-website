@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { EmailTemplate } from '@/components/EmailTemplate'
 
 type ContactFormData = {
   name: string
@@ -49,25 +50,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid message' }, { status: 400 })
   }
 
-  const plainText = `New contact message from ${name} <${email}>
-
-Subject: ${subject}
-
-Message:
-${message}`
-
-  const html = `
-  <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif; line-height: 1.6; color: #111827;">
-    <h2 style="margin: 0 0 8px;">New contact message</h2>
-    <p style="margin: 0 0 12px;">From: <strong>${name}</strong> &lt;${email}&gt;</p>
-    <p style="margin: 0 0 12px;">Subject: <strong>${subject}</strong></p>
-    <div style="padding: 12px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; white-space: pre-wrap;">${message
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/\n/g, '<br/>')}</div>
-  </div>
-  `
+  // Use React email template rendered by Resend
 
   try {
     const { error } = await resend.emails.send({
@@ -75,8 +58,7 @@ ${message}`
       to: [contactTo],
       subject: `Portfolio Contact: ${subject}`,
       replyTo: email,
-      text: plainText,
-      html
+      react: EmailTemplate({ name, email, subject, message })
     })
 
     if (error) {

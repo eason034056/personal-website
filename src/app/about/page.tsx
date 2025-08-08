@@ -2,12 +2,13 @@
 
 import { Suspense, useState, useEffect, useCallback } from 'react'
 import Timeline from '@/components/Timeline'
-import { FaUser, FaLightbulb, FaChartLine } from 'react-icons/fa'
+import { FaUser, FaLightbulb, FaChartLine, FaChartBar, FaDatabase, FaCode, FaCloud, FaFlask, FaProjectDiagram, FaCogs } from 'react-icons/fa'
 
 // About 頁面
 export default function AboutPage() {  
   const [activeCard, setActiveCard] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
+  const [skillsTab, setSkillsTab] = useState<'skills' | 'tools'>('skills');
   
   const cards = [
     {
@@ -32,6 +33,73 @@ export default function AboutPage() {
       icon: <FaChartLine size={24} className="text-white" />,
       description: "With expertise in statistical analysis and predictive modeling, I transform raw data into actionable insights that drive strategic business decisions."
     }
+  ];
+
+  // 技能與工具資料
+  const skillGroups = [
+    {
+      title: 'Analytics & ML',
+      icon: <FaChartBar size={20} className="text-white" />,
+      items: [
+        'Data Analysis',
+        'A/B Testing',
+        'Statistical Modeling',
+        'Regression',
+        'Time Series',
+        'NLP',
+        'Feature Engineering',
+        'Data Mining',
+        'Data Modeling',
+      ],
+    },
+    {
+      title: 'Data Engineering',
+      icon: <FaDatabase size={20} className="text-white" />,
+      items: [
+        'ETL',
+        'Data Warehousing',
+        'Data Pipeline Architecture',
+        'API Integration',
+      ],
+    },
+    {
+      title: 'Process',
+      icon: <FaProjectDiagram size={20} className="text-white" />,
+      items: ['Agile/Scrum'],
+    },
+  ];
+
+  const toolGroups = [
+    {
+      title: 'Programming',
+      icon: <FaCode size={20} className="text-white" />,
+      items: ['Python', 'R', 'Java', 'Dart', 'JavaScript', 'HTML/CSS'],
+    },
+    {
+      title: 'Python Libraries',
+      icon: <FaFlask size={20} className="text-white" />,
+      items: ['Pandas', 'NumPy', 'PyTorch', 'TensorFlow', 'Seaborn'],
+    },
+    {
+      title: 'Databases',
+      icon: <FaDatabase size={20} className="text-white" />,
+      items: ['MongoDB', 'PostgreSQL'],
+    },
+    {
+      title: 'Cloud',
+      icon: <FaCloud size={20} className="text-white" />,
+      items: ['AWS', 'GCP'],
+    },
+    {
+      title: 'DevOps',
+      icon: <FaCogs size={20} className="text-white" />,
+      items: ['Git', 'Docker', 'Git CI/CD'],
+    },
+    {
+      title: 'Data & BI',
+      icon: <FaChartLine size={20} className="text-white" />,
+      items: ['SQL', 'Power BI'],
+    },
   ];
 
   const goToNextCard = useCallback(() => {
@@ -199,7 +267,7 @@ export default function AboutPage() {
       {/* Skills Section */}
       <div id="skills" className="py-24 bg-white scroll-mt-20">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 md:mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Technical Skills
             </h2>
@@ -207,146 +275,57 @@ export default function AboutPage() {
               A comprehensive toolkit for modern data science and analytics
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Data Science Skills */}
-            <div className="group">
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 border border-gray-200 hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
+
+          {/* Tabs */}
+          <div className="flex justify-center mb-10">
+            <div className="inline-flex rounded-xl bg-gray-100 p-1">
+              <button
+                onClick={() => setSkillsTab('skills')}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                  skillsTab === 'skills'
+                    ? 'bg-white text-gray-900 shadow'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Skills
+              </button>
+              <button
+                onClick={() => setSkillsTab('tools')}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                  skillsTab === 'tools'
+                    ? 'bg-white text-gray-900 shadow'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Tools
+              </button>
+            </div>
+          </div>
+
+          {/* Grouped chips */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {(skillsTab === 'skills' ? skillGroups : toolGroups).map((group, index) => (
+              <div key={`${group.title}-${index}`} className="group">
+                <div className="rounded-2xl p-6 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 hover:shadow-xl transition-all duration-300 h-full md:min-h-[220px]">
+                  <div className="flex items-center mb-5">
+                    <div className="w-10 h-10 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg flex items-center justify-center">
+                      <span className="text-white">{group.icon}</span>
+                    </div>
+                    <h3 className="ml-3 text-xl font-bold text-gray-900">{group.title}</h3>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Data Science</h3>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="skill-item">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium text-gray-700">Python/Pandas</span>
-                      <span className="text-sm font-semibold text-gray-800">85%</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-gray-600 to-gray-800 rounded-full" style={{width: '85%'}}></div>
-                    </div>
-                  </div>
-                  
-                  <div className="skill-item">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium text-gray-700">AI/ML</span>
-                      <span className="text-sm font-semibold text-gray-800">80%</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-gray-600 to-gray-800 rounded-full" style={{width: '80%'}}></div>
-                    </div>
-                  </div>
-                  
-                  <div className="skill-item">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium text-gray-700">AI Agent</span>
-                      <span className="text-sm font-semibold text-gray-800">80%</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-gray-600 to-gray-800 rounded-full" style={{width: '80%'}}></div>
-                    </div>
+                  <div className="flex flex-wrap gap-2">
+                    {group.items.map((item) => (
+                      <span
+                        key={item}
+                        className="inline-flex items-center px-3 py-1 rounded-full border border-gray-200 bg-white text-gray-800 text-sm font-medium shadow-sm hover:shadow transition-all"
+                      >
+                        {item}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
-            </div>
-            
-            {/* Analytics Skills */}
-            <div className="group">
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 border border-gray-200 hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900">Analytics</h3>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="skill-item">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium text-gray-700">SQL</span>
-                      <span className="text-sm font-semibold text-gray-800">85%</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-gray-600 to-gray-800 rounded-full" style={{width: '85%'}}></div>
-                    </div>
-                  </div>
-                  
-                  <div className="skill-item">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium text-gray-700">Data Visualization</span>
-                      <span className="text-sm font-semibold text-gray-800">85%</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-gray-600 to-gray-800 rounded-full" style={{width: '85%'}}></div>
-                    </div>
-                  </div>
-                  
-                  <div className="skill-item">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium text-gray-700">Automation Workflow</span>
-                      <span className="text-sm font-semibold text-gray-800">90%</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-gray-600 to-gray-800 rounded-full" style={{width: '90%'}}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Tools & Technologies */}
-            <div className="group md:col-span-2 lg:col-span-1">
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 border border-gray-200 hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900">Tools</h3>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="skill-item">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium text-gray-700">CI/CD</span>
-                      <span className="text-sm font-semibold text-gray-800">80%</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-gray-600 to-gray-800 rounded-full" style={{width: '80%'}}></div>
-                    </div>
-                  </div>
-                  
-                  <div className="skill-item">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium text-gray-700">Tableau/PowerBI</span>
-                      <span className="text-sm font-semibold text-gray-800">85%</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-gray-600 to-gray-800 rounded-full" style={{width: '85%'}}></div>
-                    </div>
-                  </div>
-                  
-                  <div className="skill-item">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium text-gray-700">Git/Docker</span>
-                      <span className="text-sm font-semibold text-gray-800">80%</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-gray-600 to-gray-800 rounded-full" style={{width: '80%'}}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

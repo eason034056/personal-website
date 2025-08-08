@@ -135,7 +135,7 @@ export default function Timeline() {
   const sortedTimelineData = [...timelineData].sort((a, b) => parseInt(a.year) - parseInt(b.year))
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 relative py-20">
+    <div className="w-full mx-auto px-0 relative py-20">
       {/* Timeline line - Mobile vertical */}
       <div className="md:hidden absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-gray-200 to-gray-300 h-full"></div>
 
@@ -143,7 +143,7 @@ export default function Timeline() {
       <div className="hidden md:block absolute top-1/2 transform -translate-y-1/2 w-full h-0.5 bg-gradient-to-r from-gray-200 to-gray-300"></div>
 
       {/* Timeline items container */}
-      <div className="relative flex flex-col md:flex-row md:justify-between md:items-center md:flex-nowrap gap-4">
+      <div className="relative flex flex-col md:flex-row md:justify-center md:items-center md:flex-nowrap gap-6 lg:gap-8">
         {sortedTimelineData.map((item, index) => (
           <TimelineItemComponent
             key={item.id}
