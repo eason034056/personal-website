@@ -1,16 +1,13 @@
-import type { Metadata, Viewport } from 'next'
+import type { Metadata } from 'next'
 
-// 網站 SEO 資訊設定
 export const metadata: Metadata = {
-  title: 'Eason Wu - 3D Portfolio',
-  description: '以可愛 3D 角色導覽的個人作品網站 - Play & Build with Me!',
-  keywords: ['portfolio', '3D', 'web development', 'interactive'],
+  title: 'Eason Wu - Portfolio',
+  description: 'Eason Wu - Portfolio',
+  keywords: ['portfolio', 'web development', 'interactive', 'easonwu.com', 'data science', 'machine learning', 'artificial intelligence', 'web3', 'AML', 'KYC'],
+  authors: [{ name: 'Eason Wu' }],
+  icons: {
+    icon: '/images/icon.svg',
+    shortcut: '/images/icon.svg',
+    apple: '/images/icon.svg',
+  },
 }
-
-// 視口設定
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-} 
