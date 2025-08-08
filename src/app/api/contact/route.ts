@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { render } from '@react-email/render'
 import { EmailTemplate } from '@/components/EmailTemplate'
 
 type ContactFormData = {
@@ -53,12 +54,17 @@ export async function POST(request: Request) {
   // Use React email template rendered by Resend
 
   try {
+    const html: string = await (render as unknown as (c: React.ReactElement) => Promise<string>)(
+      EmailTemplate({ name, email, subject, message })
+    )
+
     const { error } = await resend.emails.send({
       from: contactFrom,
       to: [contactTo],
       subject: `Portfolio Contact: ${subject}`,
       replyTo: email,
-      react: EmailTemplate({ name, email, subject, message })
+      html,
+      text: `From: ${name} <${email}>\n\n${message}`
     })
 
     if (error) {
