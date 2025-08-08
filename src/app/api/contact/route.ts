@@ -11,7 +11,7 @@ type ContactFormData = {
 
 const resendApiKey = process.env.RESEND_API_KEY
 const contactTo = process.env.CONTACT_TO
-const contactFrom = process.env.CONTACT_FROM || 'Portfolio Contact <onboarding@resend.dev>'
+const contactFrom = process.env.CONTACT_FROM || 'Eason Wu <contact@easonwu.com>'
 
 function isValidEmail(email: string): boolean {
   // Keep it simple and robust
@@ -62,12 +62,22 @@ export async function POST(request: Request) {
     })
 
     if (error) {
-      return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
+      console.error('Resend API Error:', error)
+      return NextResponse.json({ 
+        error: 'Failed to send email',
+        details: error.message,
+        code: error.statusCode
+      }, { status: 500 })
     }
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    return NextResponse.json({ error: 'Email service error' }, { status: 500 })
+    console.error('Unexpected error:', err)
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+    return NextResponse.json({ 
+      error: 'Email service error',
+      details: errorMessage
+    }, { status: 500 })
   }
 }
 
