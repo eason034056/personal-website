@@ -18,8 +18,6 @@ export const metadata: Metadata = {
     images: [
       {
         url: '/images/icon.svg',  // 您需要添加這張圖片
-        width: 630,
-        height: 630,
         alt: 'Eason Wu Portfolio Preview'
       }
     ],
