@@ -52,12 +52,12 @@ export default function ContactPage() {
                   <div className="min-w-0 flex-1">
                     <h3 className="font-semibold text-gray-800">LinkedIn</h3>
                     <a 
-                      href="https://www.linkedin.com/in/yu-sen-wu-aa0961277/"
+                      href="https://www.linkedin.com/in/yu-sen-wu/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-600 hover:text-gray-900 transition-colors block truncate"
                     >
-                      https://www.linkedin.com/in/yu-sen-wu-aa0961277/
+                      https://www.linkedin.com/in/yu-sen-wu/
                     </a>
                   </div>
                 </div>
