@@ -38,24 +38,30 @@ export default function ContactForm() {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true)
     setCharacterAnimation('typing')
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to send email')
+      }
+
       setSubmitStatus('success')
       setCharacterAnimation('wave')
       reset()
-      
+
       setTimeout(() => {
         setSubmitStatus('idle')
         setCharacterAnimation('idle')
       }, 3000)
-      
     } catch (error) {
       setSubmitStatus('error')
       setCharacterAnimation('idle')
-      
+
       setTimeout(() => {
         setSubmitStatus('idle')
       }, 3000)
