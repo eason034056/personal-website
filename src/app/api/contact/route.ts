@@ -66,7 +66,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ 
         error: 'Failed to send email',
         details: error.message,
-        code: error.statusCode
       }, { status: 500 })
     }
 
