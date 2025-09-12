@@ -119,7 +119,7 @@ function EntryScreen({ onEnter }: { onEnter: () => void }) {
             sequence={[
               "I'm a Data Analyst",
               500,
-              "I'm a Data Enthusiast",
+              "I'm a Data Scientist",
               500,
               "I'm a Startup Founder",
               500,
