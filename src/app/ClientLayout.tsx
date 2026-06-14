@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 
 export default function ClientLayout({
@@ -11,8 +10,9 @@ export default function ClientLayout({
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const pathname = usePathname();
-  const isHomePage = pathname === '/';
+  // 💡 導覽文字顏色集中在這裡決定，避免在 JSX 裡重複寫同樣的判斷式（DRY）
+  // 現在所有頁面背景都是淺色，文字一律用深色 gray-900
+  const navTextClass = 'text-gray-900';
 
   // 監聽滾動事件
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function ClientLayout({
               <Link 
                 href="/" 
                 className={`text-xl font-semibold transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100 ' : 'text-gray-600'
+                  navTextClass
                 } hover:text-primary-600`}
               >
                 Eason Wu
@@ -63,7 +63,7 @@ export default function ClientLayout({
               <Link 
                 href="/" 
                 className={`transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-600'
+                  navTextClass
                 }  hover:text-primary-600`}
               >
                 Home
@@ -71,7 +71,7 @@ export default function ClientLayout({
               <Link 
                 href="/about" 
                 className={`transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-600'
+                  navTextClass
                 }  hover:text-primary-600`}
               >
                 About
@@ -79,7 +79,7 @@ export default function ClientLayout({
               <Link 
                 href="/about#skills" 
                 className={`transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-600'
+                  navTextClass
                 }  hover:text-primary-600`}
                 onClick={(e) => {
                   if (window.location.pathname === '/about') {
@@ -93,7 +93,7 @@ export default function ClientLayout({
               <Link 
                 href="/about#journey" 
                 className={`transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-600'
+                  navTextClass
                 }  hover:text-primary-600`}
                 onClick={(e) => {
                   if (window.location.pathname === '/about') {
@@ -107,7 +107,7 @@ export default function ClientLayout({
               <Link 
                 href="/projects" 
                 className={`transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-600'
+                  navTextClass
                 }  hover:text-primary-600`}
               >
                 Projects
@@ -115,7 +115,7 @@ export default function ClientLayout({
               <Link 
                 href="/contact" 
                 className={`transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-600'
+                  navTextClass
                 }  hover:text-primary-600`}
               >
                 Contact Me
@@ -127,7 +127,7 @@ export default function ClientLayout({
               <button 
                 onClick={toggleMenu}
                 className={`p-2 rounded-md transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-600'
+                  navTextClass
                 }  hover:text-primary-600`}
                 aria-label="Toggle menu"
               >
@@ -170,7 +170,7 @@ export default function ClientLayout({
                 href="/"
                 onClick={closeMenu}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-800'
+                  navTextClass
                 } hover:text-primary-600`}
               >
                 Home
@@ -179,7 +179,7 @@ export default function ClientLayout({
                 href="/about"
                 onClick={closeMenu}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-800'
+                  navTextClass
                 } hover:text-primary-600`}
               >
                 About
@@ -188,7 +188,7 @@ export default function ClientLayout({
                 href="/about#skills"
                 onClick={closeMenu}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-800'
+                  navTextClass
                 } hover:text-primary-600`}
               >
                 Skills
@@ -197,7 +197,7 @@ export default function ClientLayout({
                 href="/about#journey"
                 onClick={closeMenu}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-800'
+                  navTextClass
                 } hover:text-primary-600`}
               >
                 Journey
@@ -206,7 +206,7 @@ export default function ClientLayout({
                 href="/projects"
                 onClick={closeMenu}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-800'
+                  navTextClass
                 } hover:text-primary-600`}
               >
                 Projects
@@ -215,7 +215,7 @@ export default function ClientLayout({
                 href="/contact"
                 onClick={closeMenu}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                  isHomePage && !isScrolled ? 'text-gray-100' : 'text-gray-800'
+                  navTextClass
                 } hover:text-primary-600`}
               >
                 Contact Me

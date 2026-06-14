@@ -2,62 +2,87 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import {
+  FaRobot,
+  FaBrain,
+  FaChartBar,
+  FaFlask,
+  FaExternalLinkAlt,
+  FaCode,
+} from 'react-icons/fa'
+import type { IconType } from 'react-icons'
 
-// 專案資料介面
+// Project data interface
 interface Project {
   id: string
   title: string
+  subtitle: string // organization / award / venue + timeframe
   description: string
-  image: string
   tech: string[]
   demoUrl?: string
   codeUrl?: string
-  category: 'web' | '3d' | 'mobile' | 'game'
+  category: 'ai' | 'ml' | 'data' | 'research'
 }
 
-// 專案資料
+// Real projects sourced from CV (cv.pdf)
 const projects: Project[] = [
   {
     id: '1',
-    title: '3D Portfolio Website',
-    description: '使用 React Three Fiber 打造的互動式個人網站，結合 3D 角色導覽和沉浸式場景。',
-    image: '/images/project-portfolio.jpg',
-    tech: ['React', 'Next.js', 'Three.js', 'TypeScript', 'Tailwind CSS'],
-    demoUrl: 'https://example.com',
-    codeUrl: 'https://github.com/example',
-    category: '3d'
+    title: 'Real Estate Due Diligence Agent',
+    subtitle: 'Land Vision · 2025',
+    description:
+      'An automated real estate due diligence agent built with LangGraph and MCP tool calling that compresses research turnaround from months to under an hour and cuts manual drafting time by 80%, synthesizing 20+ heterogeneous data sources into citation-backed risk reports.',
+    tech: ['LangGraph', 'MCP', 'Multi-Agent', 'RAG', 'Python'],
+    category: 'ai'
   },
   {
     id: '2',
-    title: 'E-commerce Platform',
-    description: '全端電商平台，包含購物車、支付系統、後台管理等完整功能。',
-    image: '/images/project-ecommerce.jpg', 
-    tech: ['React', 'Node.js', 'MongoDB', 'Stripe', 'Docker'],
-    demoUrl: 'https://example.com',
-    codeUrl: 'https://github.com/example',
-    category: 'web'
+    title: 'Regulatory Compliance NLP Pipeline',
+    subtitle: 'WOOX · Global Crypto Exchange',
+    description:
+      'An automated NLP pipeline using text-similarity algorithms to process regulatory documents across 19 crypto exchanges, cutting manual compliance analysis time by 95%, plus a RAG-powered conversational AI for natural-language database querying at 97%+ validation accuracy.',
+    tech: ['NLP', 'RAG', 'Tableau', 'Python', 'SQL'],
+    category: 'data'
   },
   {
     id: '3',
-    title: 'WebGL 粒子系統',
-    description: '純 WebGL 實作的粒子效果系統，支援多種動畫模式和互動操作。',
-    image: '/images/project-particles.jpg',
-    tech: ['WebGL', 'GLSL', 'JavaScript', 'Canvas'],
-    demoUrl: 'https://example.com',
-    codeUrl: 'https://github.com/example',
-    category: '3d'
+    title: 'Soccer Scout Co-Pilot',
+    subtitle: 'Northwestern AI Hackathon · 3rd Place',
+    description:
+      'An end-to-end scouting platform integrating predictive models with locally deployed LLMs fine-tuned via LoRA, reducing analyst workload by 80%. Engineered 40+ temporal and position-specific features and trained XGBoost/LightGBM ensembles reaching an AUC of 0.90.',
+    tech: ['LoRA', 'XGBoost', 'LightGBM', 'Feature Engineering', 'Python'],
+    category: 'ml'
   },
   {
     id: '4',
-    title: 'React Native App',
-    description: '跨平台行動應用程式，包含即時通訊、地圖定位等功能。',
-    image: '/images/project-mobile.jpg',
-    tech: ['React Native', 'Expo', 'Firebase', 'TypeScript'],
-    demoUrl: 'https://example.com',
-    codeUrl: 'https://github.com/example',
-    category: 'mobile'
+    title: 'AI-Powered Educational Analytics Platform',
+    subtitle: 'Personal Project · 2025',
+    description:
+      'An AI tutor agent leveraging RAG and personalized student context to deliver real-time learning guidance, raising task completion rates by 32%. Adaptive feedback and dynamic graph-based proficiency tracking improved personalized learning-path accuracy by 85%.',
+    tech: ['RAG', 'LLM', 'Graph', 'Prompt Engineering', 'Python'],
+    codeUrl: 'https://github.com/eason034056/tutor-matching',
+    category: 'ai'
+  },
+  {
+    id: '5',
+    title: 'Gait-Based Personal Identification',
+    subtitle: 'Advanced Engineering Informatics · 2024',
+    description:
+      'Published research (Impact Factor 9.9, Top 10% in Computer Science) comparing image-based and time-series deep learning models for recognizing walking status and revealing personal identification from two types of feature datasets.',
+    tech: ['Deep Learning', 'Time Series', 'CNN', 'PyTorch'],
+    demoUrl: 'https://doi.org/10.1016/j.aei.2024.102729',
+    category: 'research'
   }
 ]
+
+// 💡 分類 → { 顯示文字, 對應 react-icons 圖示 } 的設定表。
+// 對齊 about 頁「用 FaXxx 圖示而非 emoji」的做法，集中管理方便擴充。
+const CATEGORY_META: Record<Project['category'], { label: string; Icon: IconType }> = {
+  ai:       { label: 'AI AGENT', Icon: FaRobot },
+  ml:       { label: 'MACHINE LEARNING', Icon: FaBrain },
+  data:     { label: 'DATA', Icon: FaChartBar },
+  research: { label: 'RESEARCH', Icon: FaFlask },
+}
 
 // 專案卡片組件
 interface ProjectCardProps {
@@ -67,99 +92,50 @@ interface ProjectCardProps {
 }
 
 function ProjectCard({ project, index, onSelect }: ProjectCardProps) {
-  const [isHovered, setIsHovered] = useState(false)
-
-  // 根據分類決定顏色
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'web': return 'bg-blue-500'
-      case '3d': return 'bg-purple-500'
-      case 'mobile': return 'bg-green-500'
-      case 'game': return 'bg-red-500'
-      default: return 'bg-gray-500'
-    }
-  }
-
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'web': return '🌐'
-      case '3d': return '🎮'
-      case 'mobile': return '📱'
-      case 'game': return '🎯'
-      default: return '💻'
-    }
-  }
+  const { label, Icon } = CATEGORY_META[project.category]
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="project-card"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
       onClick={() => onSelect(project)}
+      // 對齊 about 頁卡片：白底、圓角、細灰邊、hover 抬升加陰影
+      className="group cursor-pointer overflow-hidden rounded-2xl border border-gray-200
+                 bg-white shadow-sm transition-all duration-300
+                 hover:-translate-y-1 hover:shadow-xl"
     >
-      {/* 專案圖片 */}
-      <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden">
-        {/* 暫時用漸層代替圖片 */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-400 to-primary-600 opacity-80"></div>
-        
-        {/* 分類標籤 */}
-        <div className={`absolute top-3 left-3 ${getCategoryColor(project.category)} text-white px-2 py-1 rounded-full text-sm font-semibold`}>
-          <span className="mr-1">{getCategoryIcon(project.category)}</span>
-          {project.category.toUpperCase()}
-        </div>
+      {/* 專案圖片區（用 about 頁的灰階漸層當佔位） */}
+      <div className="relative h-44 overflow-hidden bg-gradient-to-br from-gray-600 to-gray-800">
+        {/* 置中的分類大圖示，淡淡浮在漸層上 */}
+        <Icon
+          size={56}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white/20"
+        />
 
-        {/* Hover 覆蓋層 */}
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-black/50 flex items-center justify-center"
-          >
-            <div className="text-center">
-              <p className="text-white mb-4">點擊查看詳情</p>
-              <div className="flex space-x-3">
-                {project.demoUrl && (
-                  <button 
-                    className="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      window.open(project.demoUrl, '_blank')
-                    }}
-                  >
-                    🔗 Demo
-                  </button>
-                )}
-                {project.codeUrl && (
-                  <button 
-                    className="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      window.open(project.codeUrl, '_blank')
-                    }}
-                  >
-                    📝 Code
-                  </button>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        )}
+        {/* 分類標籤：白底膠囊 + 灰階圖示，呼應 about 的 chip 樣式 */}
+        <div className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full
+                        border border-gray-200 bg-white px-3 py-1 text-xs font-semibold
+                        text-gray-800 shadow-sm">
+          <Icon size={12} className="text-gray-600" />
+          {label}
+        </div>
       </div>
 
       {/* 專案資訊 */}
       <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-800 mb-2">{project.title}</h3>
-        <p className="text-gray-600 mb-4 leading-relaxed">{project.description}</p>
-        
-        {/* 技術標籤 */}
+        <h3 className="text-xl font-bold text-gray-900">{project.title}</h3>
+        <p className="mb-3 mt-1 text-sm font-medium text-gray-500">{project.subtitle}</p>
+        <p className="mb-4 leading-relaxed text-gray-600 line-clamp-3">{project.description}</p>
+
+        {/* 技術標籤：對齊 about 頁的白底膠囊 */}
         <div className="flex flex-wrap gap-2">
           {project.tech.map((tech) => (
             <span
               key={tech}
-              className="px-2 py-1 bg-primary-100 text-primary-700 rounded-md text-sm"
+              className="inline-flex items-center rounded-full border border-gray-200 bg-white
+                         px-3 py-1 text-sm font-medium text-gray-800 shadow-sm
+                         transition-all hover:shadow"
             >
               {tech}
             </span>
@@ -176,83 +152,116 @@ export default function ProjectGrid() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   // 過濾專案
-  const filteredProjects = selectedCategory === 'all' 
-    ? projects 
+  const filteredProjects = selectedCategory === 'all'
+    ? projects
     : projects.filter(project => project.category === selectedCategory)
 
-  const categories = ['all', 'web', '3d', 'mobile', 'game']
+  const categories = ['all', 'ai', 'ml', 'data', 'research']
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
-      {/* 分類過濾器 */}
-      <div className="flex justify-center mb-12">
-        <div className="flex space-x-2 bg-white rounded-full p-2 shadow-lg">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2 rounded-full font-medium transition-colors ${
-                selectedCategory === category
-                  ? 'bg-primary-500 text-white'
-                  : 'text-gray-600 hover:text-primary-500'
-              }`}
-            >
-              {category === 'all' ? '全部' : category.toUpperCase()}
-            </button>
-          ))}
+    // 對齊 about 頁：淺灰背景 + py-24（同時也讓內容避開固定 navbar）
+    <div className="min-h-screen bg-gray-50 py-24">
+      <div className="mx-auto max-w-6xl px-4">
+        {/* 標題區：沿用 about 頁的「大標 + w-24 漸層底線」 */}
+        <div className="mb-16 text-center">
+          <h2 className="mb-6 text-4xl font-bold text-gray-900 md:text-5xl">Projects</h2>
+          <div className="mx-auto h-1 w-24 bg-gradient-to-r from-gray-400 to-gray-600" />
         </div>
-      </div>
 
-      {/* 專案網格 */}
-      <motion.div 
-        layout
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-      >
-        {filteredProjects.map((project, index) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            index={index}
-            onSelect={setSelectedProject}
-          />
-        ))}
-      </motion.div>
+        {/* 分類過濾器：沿用 about 頁 Skills/Tools 的 Tabs 樣式 */}
+        <div className="mb-12 flex justify-center">
+          <div className="inline-flex flex-wrap justify-center rounded-xl bg-gray-100 p-1">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
+                  selectedCategory === category
+                    ? 'bg-white text-gray-900 shadow'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                {category === 'all' ? 'All' : category.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 專案網格 */}
+        <motion.div
+          layout
+          className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3"
+        >
+          {filteredProjects.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={index}
+              onSelect={setSelectedProject}
+            />
+          ))}
+        </motion.div>
+      </div>
 
       {/* 專案詳情彈窗 */}
       {selectedProject && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
           onClick={() => setSelectedProject(null)}
         >
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            // 對齊 about 頁卡片：白底大圓角 + 陰影
+            className="max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-gray-100
+                       bg-white p-8 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-start mb-6">
-              <h2 className="text-3xl font-bold text-gray-800">{selectedProject.title}</h2>
+            <div className="mb-6 flex items-start justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
+                  {selectedProject.title}
+                </h2>
+                <p className="mt-1 text-sm font-medium text-gray-500">
+                  {selectedProject.subtitle}
+                </p>
+              </div>
               <button
                 onClick={() => setSelectedProject(null)}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
+                className="text-2xl text-gray-400 transition-colors hover:text-gray-700"
+                aria-label="Close"
               >
                 ✕
               </button>
             </div>
-            <p className="text-gray-600 mb-6 leading-relaxed">{selectedProject.description}</p>
-            
-            {/* 詳細資訊可以在這裡擴展 */}
-            <div className="flex space-x-4">
+            <p className="mb-6 leading-relaxed text-gray-600">{selectedProject.description}</p>
+
+            {/* 技術標籤 */}
+            <div className="mb-8 flex flex-wrap gap-2">
+              {selectedProject.tech.map((tech) => (
+                <span
+                  key={tech}
+                  className="inline-flex items-center rounded-full border border-gray-200 bg-white
+                             px-3 py-1 text-sm font-medium text-gray-800 shadow-sm"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-4">
               {selectedProject.demoUrl && (
                 <a
                   href={selectedProject.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition-colors"
+                  className="flex items-center gap-2 rounded-lg bg-gray-800 px-6 py-3 text-white
+                             shadow-md transition-all duration-300 hover:shadow-lg"
                 >
-                  🔗 查看 Demo
+                  <FaExternalLinkAlt size={14} />
+                  <span>View Project</span>
                 </a>
               )}
               {selectedProject.codeUrl && (
@@ -260,17 +269,17 @@ export default function ProjectGrid() {
                   href={selectedProject.codeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-gray-700 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white
+                             px-6 py-3 text-gray-800 shadow-md transition-all duration-300 hover:shadow-lg"
                 >
-                  📝 查看程式碼
+                  <FaCode size={16} />
+                  <span>View Code</span>
                 </a>
               )}
             </div>
           </motion.div>
         </motion.div>
       )}
-
-      {/* TODO-LLM:ProjectGrid:Add 3D scene background with interactive lab items */}
     </div>
   )
-} 
+}

@@ -5,6 +5,8 @@ import { TypeAnimation } from 'react-type-animation'
 import Spline from '@splinetool/react-spline/next'
 import type { Application } from '@splinetool/runtime'
 import { FaLinkedinIn, FaGithub, FaEnvelope } from 'react-icons/fa'
+import { useIsMobile } from '@/hooks/useIsMobile'
+import ProjectGrid from '@/components/ProjectGrid'
 
 // 載入中的組件
 function LoadingScreen() {
@@ -92,7 +94,10 @@ function EntryScreen({ onEnter }: { onEnter: () => void }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-black to-gray-800 text-white">
+    <div
+      className="flex flex-col items-center justify-center h-screen text-gray-900"
+      style={{ backgroundColor: 'rgb(215, 215, 215)' }} // 與 projects 頁同樣的淺灰
+    >
       {/* 照片容器 */}
       <div 
         className="relative w-48 h-48 mb-8"
@@ -103,7 +108,7 @@ function EntryScreen({ onEnter }: { onEnter: () => void }) {
         }}
       >
         <img
-          src="/images/profile.svg"
+          src="/images/profile.jpg"
           alt="Profile"
           className="w-full h-full object-cover"
         />
@@ -117,17 +122,16 @@ function EntryScreen({ onEnter }: { onEnter: () => void }) {
         {startTyping && (
           <TypeAnimation
             sequence={[
-              "I'm a Data Analyst",
+              "I'm an AI Engineer",
+              500,
+              "I'm a ML Engineer",
               500,
               "I'm a Data Scientist",
               500,
               "I'm a Startup Founder",
               500,
               "I'm an Active Learner",
-              500,
-              "I'm a Vibe Coder",
               500
-              
             ]}
             wrapper="span"
             speed={30}
@@ -233,20 +237,38 @@ function SplineScene() {
 
 // Landing Page 主組件
 export default function Home() {
-  const [showSpline, setShowSpline] = useState(false)
+  const [showScene, setShowScene] = useState(false)
+  const isMobile = useIsMobile()
 
   // 處理 Enter 按鈕點擊
   const handleEnter = () => {
-    setShowSpline(true)
+    setShowScene(true)
   }
 
+  // 還沒按按鈕 → 一律顯示入口畫面（手機、桌機通用）
+  if (!showScene) {
+    return (
+      <div className="w-full h-screen">
+        <EntryScreen onEnter={handleEnter} />
+      </div>
+    )
+  }
+
+  // 按了按鈕但裝置尚未判斷完成 → 先顯示 Loading，避免手機誤掛載 Spline
+  if (isMobile === undefined) {
+    return <LoadingScreen />
+  }
+
+  // 手機：卡片列表用自然文件流（min-h-screen），window 才會真正捲動，
+  // 全域 navbar 的「捲動變白色毛玻璃」才會生效（與 projects 頁同樣修法）。
+  if (isMobile) {
+    return <ProjectGrid />
+  }
+
+  // 桌機：3D 場景固定滿版、不捲動，所以才用 h-screen 包住。
   return (
     <div className="w-full h-screen">
-      {showSpline ? (
-        <SplineScene />
-      ) : (
-        <EntryScreen onEnter={handleEnter} />
-      )}
+      <SplineScene />
     </div>
   )
 } 
