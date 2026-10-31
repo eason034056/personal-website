@@ -19,6 +19,7 @@ interface TimelineItem {
 }
 
 // Timeline data
+// ⚠️ `year` must start with a number: items are sorted with parseInt(year), and e.g. 'Summer 2026' would parse to NaN
 const timelineData: TimelineItem[] = [
   {
     id: '1',
@@ -46,8 +47,8 @@ const timelineData: TimelineItem[] = [
   },
   {
     id: '3',
-    year: '2025-Present',
-    title: 'KYC Analyst Intern',
+    year: '2025',
+    title: 'Data Analyst Intern',
     company: 'WOOX',
     icon: {
       src: '/images/woox.svg',
@@ -67,6 +68,18 @@ const timelineData: TimelineItem[] = [
       width: 80,
       height: 80
     }
+  },
+  {
+    id: '5',
+    year: '2026',
+    title: 'AI Engineer Intern',
+    company: 'GoFundMe',
+    icon: {
+      src: '/images/gofundme.png',
+      alt: 'GoFundMe',
+      width: 80,
+      height: 80
+    }
   }
 ]
 
@@ -81,6 +94,8 @@ function TimelineItemComponent({ item, index, isTop = false }: TimelineItemProps
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
+  // 💡 lg:flex-1 + lg:min-w-0 splits the row evenly however many items there are,
+  // so adding a journey entry no longer means rewriting a hard-coded w-1/N
   return (
     <motion.div
       ref={ref}
@@ -89,21 +104,21 @@ function TimelineItemComponent({ item, index, isTop = false }: TimelineItemProps
       transition={{ duration: 0.6, delay: index * 0.2 }}
       className={`
         relative flex items-center justify-center
-        w-full md:w-1/4 min-w-[280px]
-        mb-12 md:mb-0
-        ${isTop ? 'md:flex-col' : 'md:flex-col-reverse'}
+        w-full lg:flex-1 lg:min-w-0
+        mb-12 lg:mb-0
+        ${isTop ? 'lg:flex-col' : 'lg:flex-col-reverse'}
       `}
     >
       {/* Timeline card */}
       <div className={`
         timeline-card
-        bg-white rounded-lg shadow-lg p-6
-        w-[90%] md:w-full max-w-[400px]
+        bg-white rounded-lg shadow-lg p-6 lg:p-4 xl:p-6
+        w-[90%] lg:w-full max-w-[400px]
         h-[350px]
         relative
         hover:shadow-xl transition-shadow duration-300
         border border-gray-100
-        ${isTop ? 'md:mb-8' : 'md:mt-8'}
+        ${isTop ? 'lg:mb-8' : 'lg:mt-8'}
         text-center
         flex flex-col items-center justify-center
       `}>
@@ -123,8 +138,8 @@ function TimelineItemComponent({ item, index, isTop = false }: TimelineItemProps
         </div>
 
         {/* Title and company */}
-        <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
-        <h4 className="text-lg text-gray-600 font-semibold">{item.company}</h4>
+        <h3 className="text-xl lg:text-lg font-bold text-gray-800 mb-2">{item.title}</h3>
+        <h4 className="text-lg lg:text-base text-gray-600 font-semibold">{item.company}</h4>
       </div>
     </motion.div>
   )
@@ -137,13 +152,13 @@ export default function Timeline() {
   return (
     <div className="w-full mx-auto px-0 relative py-20">
       {/* Timeline line - Mobile vertical */}
-      <div className="md:hidden absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-gray-200 to-gray-300 h-full"></div>
+      <div className="lg:hidden absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-gray-200 to-gray-300 h-full"></div>
 
       {/* Timeline line - Desktop horizontal */}
-      <div className="hidden md:block absolute top-1/2 transform -translate-y-1/2 w-full h-0.5 bg-gradient-to-r from-gray-200 to-gray-300"></div>
+      <div className="hidden lg:block absolute top-1/2 transform -translate-y-1/2 w-full h-0.5 bg-gradient-to-r from-gray-200 to-gray-300"></div>
 
       {/* Timeline items container */}
-      <div className="relative flex flex-col md:flex-row md:justify-center md:items-center md:flex-nowrap gap-6 lg:gap-8">
+      <div className="relative flex flex-col lg:flex-row lg:justify-center lg:items-center lg:flex-nowrap gap-6">
         {sortedTimelineData.map((item, index) => (
           <TimelineItemComponent
             key={item.id}
@@ -159,7 +174,7 @@ export default function Timeline() {
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: sortedTimelineData.length * 0.2 + 0.5 }}
-        className="flex justify-center md:hidden"
+        className="flex justify-center lg:hidden"
       >
         <div className="bg-gradient-to-r from-gray-600 to-gray-700 w-6 h-6 rounded-full flex items-center justify-center">
           <span className="text-white text-xs">✨</span>

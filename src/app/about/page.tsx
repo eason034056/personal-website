@@ -2,7 +2,7 @@
 
 import { Suspense, useState, useEffect, useCallback } from 'react'
 import Timeline from '@/components/Timeline'
-import { FaUser, FaLightbulb, FaChartLine, FaChartBar, FaDatabase, FaCode, FaCloud, FaFlask, FaProjectDiagram, FaCogs } from 'react-icons/fa'
+import { FaUser, FaLightbulb, FaChartLine, FaChartBar, FaDatabase, FaCode, FaCloud, FaFlask, FaProjectDiagram, FaCogs, FaBrain, FaSearch, FaRocket, FaRobot, FaServer, FaEye } from 'react-icons/fa'
 
 // About 頁面
 export default function AboutPage() {  
@@ -38,6 +38,30 @@ export default function AboutPage() {
   // 技能與工具資料
   const skillGroups = [
     {
+      title: 'Agents & LLMs',
+      icon: <FaBrain size={20} className="text-white" />,
+      items: [
+        'Multi-Agent Orchestration',
+        'Agent Harness Design',
+        'Human-in-the-Loop',
+        'Agent Memory',
+        'Guardrails & PII Redaction',
+        'LLM Fine-tuning',
+      ],
+    },
+    {
+      title: 'RAG & Evaluation',
+      icon: <FaSearch size={20} className="text-white" />,
+      items: [
+        'Hybrid RAG',
+        'BM25',
+        'Dense Retrieval',
+        'Cross-Encoder Reranking',
+        'LLM-as-Judge',
+        'Hallucination & Citation Evals',
+      ],
+    },
+    {
       title: 'Analytics & ML',
       icon: <FaChartBar size={20} className="text-white" />,
       items: [
@@ -63,6 +87,11 @@ export default function AboutPage() {
       ],
     },
     {
+      title: 'Production',
+      icon: <FaRocket size={20} className="text-white" />,
+      items: ['REST API Design', 'Model Serving', 'Distributed Tracing'],
+    },
+    {
       title: 'Process',
       icon: <FaProjectDiagram size={20} className="text-white" />,
       items: ['Agile/Scrum'],
@@ -73,27 +102,42 @@ export default function AboutPage() {
     {
       title: 'Programming',
       icon: <FaCode size={20} className="text-white" />,
-      items: ['Python', 'R', 'Java', 'Dart', 'JavaScript', 'HTML/CSS'],
+      items: ['Python', 'TypeScript', 'R', 'Java', 'Dart', 'JavaScript', 'HTML/CSS'],
+    },
+    {
+      title: 'AI & Agents',
+      icon: <FaRobot size={20} className="text-white" />,
+      items: ['LangGraph', 'MCP', 'browser-use'],
     },
     {
       title: 'Python Libraries',
       icon: <FaFlask size={20} className="text-white" />,
-      items: ['Pandas', 'NumPy', 'PyTorch', 'TensorFlow', 'Seaborn'],
+      items: ['Pandas', 'NumPy', 'PyTorch', 'TensorFlow', 'Seaborn', 'PySpark'],
+    },
+    {
+      title: 'Web & Backend',
+      icon: <FaServer size={20} className="text-white" />,
+      items: ['FastAPI', 'React'],
     },
     {
       title: 'Databases',
       icon: <FaDatabase size={20} className="text-white" />,
-      items: ['MongoDB', 'PostgreSQL'],
+      items: ['MongoDB', 'PostgreSQL', 'BigQuery'],
     },
     {
       title: 'Cloud',
       icon: <FaCloud size={20} className="text-white" />,
-      items: ['AWS', 'GCP'],
+      items: ['AWS', 'GCP', 'Vertex AI', 'Cloud Run'],
     },
     {
       title: 'DevOps',
       icon: <FaCogs size={20} className="text-white" />,
       items: ['Git', 'Docker', 'Git CI/CD'],
+    },
+    {
+      title: 'Observability & Evals',
+      icon: <FaEye size={20} className="text-white" />,
+      items: ['OpenTelemetry', 'Coralogix', 'Braintrust', 'MLflow'],
     },
     {
       title: 'Data & BI',
@@ -332,7 +376,7 @@ export default function AboutPage() {
 
       {/* Timeline Section */}
       <div id="journey" className="py-24 bg-gray-50 scroll-mt-20">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               My Journey

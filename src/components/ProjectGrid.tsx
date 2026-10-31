@@ -1,155 +1,210 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
-import {
-  FaRobot,
-  FaBrain,
-  FaChartBar,
-  FaFlask,
-  FaExternalLinkAlt,
-  FaCode,
-} from 'react-icons/fa'
-import type { IconType } from 'react-icons'
+import { FaCode, FaExpand, FaExternalLinkAlt, FaTimes } from 'react-icons/fa'
 
 // Project data interface
 interface Project {
   id: string
   title: string
-  subtitle: string // organization / award / venue + timeframe
-  description: string
-  tech: string[]
+  subtitle: string // organization · role · timeframe
+  image: string // 專案資訊圖（public/images/projects/*.webp）
+  highlights: string[]
   demoUrl?: string
   codeUrl?: string
   category: 'ai' | 'ml' | 'data' | 'research'
 }
 
-// Real projects sourced from CV (cv.pdf)
+// 內容與桌機版 Spline 場景的專案卡片一致（順序也相同）
 const projects: Project[] = [
   {
     id: '1',
-    title: 'Real Estate Due Diligence Agent',
-    subtitle: 'Land Vision · 2025',
-    description:
-      'An automated real estate due diligence agent built with LangGraph and MCP tool calling that compresses research turnaround from months to under an hour and cuts manual drafting time by 80%, synthesizing 20+ heterogeneous data sources into citation-backed risk reports.',
-    tech: ['LangGraph', 'MCP', 'Multi-Agent', 'RAG', 'Python'],
+    title: 'Reusable AI Agent Deployment Framework',
+    subtitle: 'GoFundMe · AI Engineer Intern · Jun 2026 – Aug 2026',
+    image: '/images/projects/agent-framework.webp',
+    highlights: [
+      'Cut agent ship time by 75% (4 weeks to 1) with a deployment framework and CLI packaging LangGraph agents as FastAPI services on AWS',
+      'Removed per-agent code for 5 capabilities (memory, guardrails, PII redaction, MCP, tools) via a plug-in harness with typed feature flags',
+      'Unified debugging into one trace across API, PostgreSQL, and LLM calls with OpenTelemetry, Coralogix, and Braintrust',
+    ],
     category: 'ai'
   },
   {
     id: '2',
-    title: 'Regulatory Compliance NLP Pipeline',
-    subtitle: 'WOOX · Global Crypto Exchange',
-    description:
-      'An automated NLP pipeline using text-similarity algorithms to process regulatory documents across 19 crypto exchanges, cutting manual compliance analysis time by 95%, plus a RAG-powered conversational AI for natural-language database querying at 97%+ validation accuracy.',
-    tech: ['NLP', 'RAG', 'Tableau', 'Python', 'SQL'],
-    category: 'data'
-  },
-  {
-    id: '3',
-    title: 'Soccer Scout Co-Pilot',
-    subtitle: 'Northwestern AI Hackathon · 3rd Place',
-    description:
-      'An end-to-end scouting platform integrating predictive models with locally deployed LLMs fine-tuned via LoRA, reducing analyst workload by 80%. Engineered 40+ temporal and position-specific features and trained XGBoost/LightGBM ensembles reaching an AUC of 0.90.',
-    tech: ['LoRA', 'XGBoost', 'LightGBM', 'Feature Engineering', 'Python'],
+    title: 'LLM Fine-Tuning for Share-Text Generation',
+    subtitle: 'GoFundMe · AI Engineer Intern · Jun 2026 – Aug 2026',
+    image: '/images/projects/llm-fine-tuning.webp',
+    highlights: [
+      'Projected an 80% cut in inference cost by proposing a fine-tuning project beyond my assigned intern project',
+      'Built the training set by curating share-text examples from the existing LLM workflow',
+      'Benchmarked the fine-tuned model against the baseline with a Braintrust eval set and automated scorers',
+    ],
     category: 'ml'
   },
   {
+    id: '3',
+    title: 'Agentic Real Estate Due Diligence Platform',
+    subtitle: 'Land Vision · AI Engineer Intern · Sep 2025 – May 2026',
+    image: '/images/projects/real-estate-due-diligence.webp',
+    highlights: [
+      'Cut report drafting time by 80% with LangGraph agents that plan risk analysis and build MCP tools for zoning and property data',
+      'Cited a source for every finding across 20+ data sources via BM25 + dense retrieval and cross-encoder reranking',
+      'Shipped to production with a React front end, REST APIs, auth, tests, and CI/CD on GCP Cloud Run and Vertex AI',
+    ],
+    category: 'ai'
+  },
+  {
     id: '4',
-    title: 'AI-Powered Educational Analytics Platform',
-    subtitle: 'Personal Project · 2025',
-    description:
-      'An AI tutor agent leveraging RAG and personalized student context to deliver real-time learning guidance, raising task completion rates by 32%. Adaptive feedback and dynamic graph-based proficiency tracking improved personalized learning-path accuracy by 85%.',
-    tech: ['RAG', 'LLM', 'Graph', 'Prompt Engineering', 'Python'],
-    codeUrl: 'https://github.com/eason034056/tutor-matching',
+    title: 'Multi-Agent Text-to-SQL Analytics System',
+    subtitle: 'WOOX · Data Analyst Intern · Jun 2025 – Sep 2025',
+    image: '/images/projects/text-to-sql.webp',
+    highlights: [
+      'Built a Python and PostgreSQL multi-agent system for natural-language query generation, SQL execution, and response synthesis.',
+      'Achieved 98%+ SQL execution accuracy on natural-language data questions.',
+    ],
     category: 'ai'
   },
   {
     id: '5',
-    title: 'Gait-Based Personal Identification',
-    subtitle: 'Advanced Engineering Informatics · 2024',
-    description:
-      'Published research (Impact Factor 9.9, Top 10% in Computer Science) comparing image-based and time-series deep learning models for recognizing walking status and revealing personal identification from two types of feature datasets.',
-    tech: ['Deep Learning', 'Time Series', 'CNN', 'PyTorch'],
-    demoUrl: 'https://doi.org/10.1016/j.aei.2024.102729',
+    title: 'Automated Crypto Regulatory Monitoring',
+    subtitle: 'WOOX · Data Analyst Intern · Jun 2025 – Sep 2025',
+    image: '/images/projects/crypto-regulatory-monitoring.webp',
+    highlights: [
+      'Automated policy monitoring across 19 crypto exchanges using Python scrapers, change detection, and GitLab CI/CD.',
+      'Reduced manual regulatory review time by 95%.',
+    ],
+    category: 'data'
+  },
+  {
+    id: '6',
+    title: 'Predictive Maintenance for Manufacturing Equipment',
+    subtitle: 'National Smart Manufacturing Contest · Nov 2024',
+    image: '/images/projects/predictive-maintenance.webp',
+    highlights: [
+      'Built an LSTM–Isolation Forest ensemble to predict UV oven lamp failures 72 hours ahead, achieving 96% precision and 91% recall.',
+      'Created a React monitoring dashboard to support preventive maintenance; ranked in the top 10% of 153 teams.',
+    ],
+    category: 'ml'
+  },
+  {
+    id: '7',
+    title: 'Patient-Specific Agentic RAG for Radiation Oncology',
+    subtitle: 'Northwestern Medicine Capstone · Sep 2026 – Present',
+    image: '/images/projects/oncology-rag.webp',
+    highlights: [
+      'Unified 400 de-identified patient cases across 14 disease sites and built retrieval combining clinical-variable similarity with semantic search.',
+      'Extended a guideline-based RAG platform into an agentic pipeline generating patient-specific treatment recommendations with evidence citations.',
+    ],
     category: 'research'
+  },
+  {
+    id: '8',
+    title: 'Free AI Tutor and Tutor-Matching Platform',
+    subtitle: 'Founder & Sole Engineer · Feb 2025 – Present',
+    image: '/images/projects/ai-tutor.webp',
+    highlights: [
+      'Founded a second startup, building a free AI tutor so students with limited educational resources can ask questions freely and learn at their own pace.',
+      'Built the platform using Next.js, FastAPI, and PostgreSQL, onboarding 300 tutors and families and improving AI responses through user feedback.',
+    ],
+    category: 'ai'
   }
 ]
-
-// 💡 分類 → { 顯示文字, 對應 react-icons 圖示 } 的設定表。
-// 對齊 about 頁「用 FaXxx 圖示而非 emoji」的做法，集中管理方便擴充。
-const CATEGORY_META: Record<Project['category'], { label: string; Icon: IconType }> = {
-  ai:       { label: 'AI AGENT', Icon: FaRobot },
-  ml:       { label: 'MACHINE LEARNING', Icon: FaBrain },
-  data:     { label: 'DATA', Icon: FaChartBar },
-  research: { label: 'RESEARCH', Icon: FaFlask },
-}
 
 // 專案卡片組件
 interface ProjectCardProps {
   project: Project
   index: number
-  onSelect: (project: Project) => void
+  onZoom: (project: Project) => void
 }
 
-function ProjectCard({ project, index, onSelect }: ProjectCardProps) {
-  const { label, Icon } = CATEGORY_META[project.category]
-
+function ProjectCard({ project, index, onZoom }: ProjectCardProps) {
   return (
-    <motion.div
+    <motion.article
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
-      onClick={() => onSelect(project)}
-      // 對齊 about 頁卡片：白底、圓角、細灰邊、hover 抬升加陰影
-      className="group cursor-pointer overflow-hidden rounded-2xl border border-gray-200
-                 bg-white shadow-sm transition-all duration-300
-                 hover:-translate-y-1 hover:shadow-xl"
+      // 對齊 about 頁卡片：白底、圓角、細灰邊
+      className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
     >
-      {/* 專案圖片區（用 about 頁的灰階漸層當佔位） */}
-      <div className="relative h-44 overflow-hidden bg-gradient-to-br from-gray-600 to-gray-800">
-        {/* 置中的分類大圖示，淡淡浮在漸層上 */}
-        <Icon
-          size={56}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white/20"
+      {/* 資訊圖：手機上字很小，所以整張圖都是「點擊放大」的按鈕 */}
+      <button
+        type="button"
+        onClick={() => onZoom(project)}
+        aria-label={`Enlarge ${project.title} diagram`}
+        className="relative block aspect-video w-full border-b border-gray-100 bg-[#fbfaf7]"
+      >
+        <Image
+          src={project.image}
+          alt={`${project.title} diagram`}
+          fill
+          // 💡 sizes 告訴瀏覽器這張圖在畫面上約佔多寬，next/image 才會挑剛好的尺寸下載；
+          // 沒寫的話會產生以 100vw 為準、但不精準的 srcset
+          sizes="(min-width: 768px) 50vw, 100vw"
+          className="object-contain"
+          // 只有第一張在首屏，提早載入；其餘維持預設的 lazy loading
+          priority={index === 0}
         />
-
-        {/* 分類標籤：白底膠囊 + 灰階圖示，呼應 about 的 chip 樣式 */}
-        <div className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full
-                        border border-gray-200 bg-white px-3 py-1 text-xs font-semibold
-                        text-gray-800 shadow-sm">
-          <Icon size={12} className="text-gray-600" />
-          {label}
-        </div>
-      </div>
+        <span className="absolute bottom-2 right-2 inline-flex items-center gap-1.5 rounded-full
+                         bg-gray-900/70 px-2.5 py-1 text-xs font-medium text-white">
+          <FaExpand size={10} />
+          Zoom
+        </span>
+      </button>
 
       {/* 專案資訊 */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-900">{project.title}</h3>
-        <p className="mb-3 mt-1 text-sm font-medium text-gray-500">{project.subtitle}</p>
-        <p className="mb-4 leading-relaxed text-gray-600 line-clamp-3">{project.description}</p>
+      <div className="p-5">
+        <h3 className="text-lg font-bold leading-snug text-gray-900">{project.title}</h3>
+        <p className="mt-1 text-sm font-medium text-gray-500">{project.subtitle}</p>
 
-        {/* 技術標籤：對齊 about 頁的白底膠囊 */}
-        <div className="flex flex-wrap gap-2">
-          {project.tech.map((tech) => (
-            <span
-              key={tech}
-              className="inline-flex items-center rounded-full border border-gray-200 bg-white
-                         px-3 py-1 text-sm font-medium text-gray-800 shadow-sm
-                         transition-all hover:shadow"
-            >
-              {tech}
-            </span>
+        <ul className="mt-4 space-y-2">
+          {project.highlights.map((point) => (
+            <li key={point} className="flex gap-2.5 text-sm leading-relaxed text-gray-600">
+              {/* ⚠️ flex-none 讓圓點不會被長句子擠扁；mt-2 讓它對齊第一行文字的中線 */}
+              <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-gray-400" />
+              <span>{point}</span>
+            </li>
           ))}
-        </div>
+        </ul>
+
+        {(project.demoUrl || project.codeUrl) && (
+          <div className="mt-5 flex flex-wrap gap-3">
+            {project.demoUrl && (
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-lg bg-gray-800 px-4 py-2 text-sm text-white
+                           shadow-md transition-all duration-300 hover:shadow-lg"
+              >
+                <FaExternalLinkAlt size={12} />
+                <span>View Project</span>
+              </a>
+            )}
+            {project.codeUrl && (
+              <a
+                href={project.codeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2
+                           text-sm text-gray-800 shadow-md transition-all duration-300 hover:shadow-lg"
+              >
+                <FaCode size={14} />
+                <span>View Code</span>
+              </a>
+            )}
+          </div>
+        )}
       </div>
-    </motion.div>
+    </motion.article>
   )
 }
 
 // 專案網格主組件
 export default function ProjectGrid() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [zoomedProject, setZoomedProject] = useState<Project | null>(null)
 
   // 過濾專案
   const filteredProjects = selectedCategory === 'all'
@@ -197,87 +252,47 @@ export default function ProjectGrid() {
               key={project.id}
               project={project}
               index={index}
-              onSelect={setSelectedProject}
+              onZoom={setZoomedProject}
             />
           ))}
         </motion.div>
       </div>
 
-      {/* 專案詳情彈窗 */}
-      {selectedProject && (
+      {/* 大圖檢視：點任何地方關閉，雙指可用瀏覽器原生縮放看細節 */}
+      {zoomedProject && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
-          onClick={() => setSelectedProject(null)}
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-900/90 p-4 backdrop-blur-sm"
+          onClick={() => setZoomedProject(null)}
         >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            // 對齊 about 頁卡片：白底大圓角 + 陰影
-            className="max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-gray-100
-                       bg-white p-8 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
+          <button
+            type="button"
+            onClick={() => setZoomedProject(null)}
+            className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
+            aria-label="Close"
           >
-            <div className="mb-6 flex items-start justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
-                  {selectedProject.title}
-                </h2>
-                <p className="mt-1 text-sm font-medium text-gray-500">
-                  {selectedProject.subtitle}
-                </p>
-              </div>
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="text-2xl text-gray-400 transition-colors hover:text-gray-700"
-                aria-label="Close"
-              >
-                ✕
-              </button>
-            </div>
-            <p className="mb-6 leading-relaxed text-gray-600">{selectedProject.description}</p>
+            <FaTimes size={18} />
+          </button>
 
-            {/* 技術標籤 */}
-            <div className="mb-8 flex flex-wrap gap-2">
-              {selectedProject.tech.map((tech) => (
-                <span
-                  key={tech}
-                  className="inline-flex items-center rounded-full border border-gray-200 bg-white
-                             px-3 py-1 text-sm font-medium text-gray-800 shadow-sm"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-
-            <div className="flex flex-wrap gap-4">
-              {selectedProject.demoUrl && (
-                <a
-                  href={selectedProject.demoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-lg bg-gray-800 px-6 py-3 text-white
-                             shadow-md transition-all duration-300 hover:shadow-lg"
-                >
-                  <FaExternalLinkAlt size={14} />
-                  <span>View Project</span>
-                </a>
-              )}
-              {selectedProject.codeUrl && (
-                <a
-                  href={selectedProject.codeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white
-                             px-6 py-3 text-gray-800 shadow-md transition-all duration-300 hover:shadow-lg"
-                >
-                  <FaCode size={16} />
-                  <span>View Code</span>
-                </a>
-              )}
-            </div>
+          <motion.div
+            initial={{ scale: 0.95 }}
+            animate={{ scale: 1 }}
+            className="relative aspect-video w-full max-w-4xl overflow-hidden rounded-xl bg-[#fbfaf7]"
+          >
+            <Image
+              src={zoomedProject.image}
+              alt={`${zoomedProject.title} diagram`}
+              fill
+              sizes="100vw"
+              // 💡 大圖跳過 next/image 的縮圖：它只會依「目前螢幕寬度」挑尺寸，
+              // 雙指放大後就糊了。原檔是 <100KB 的 WebP，直接給原圖反而最划算
+              unoptimized
+              className="object-contain"
+            />
           </motion.div>
+          <p className="mt-4 text-center text-sm font-medium text-gray-200">{zoomedProject.title}</p>
+          <p className="mt-1 text-xs text-gray-400">Pinch to zoom · Tap to close</p>
         </motion.div>
       )}
     </div>
